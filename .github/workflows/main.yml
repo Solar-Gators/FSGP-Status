@@ -1,9 +1,19 @@
-name: github pages
+name: github pages deployment
 
 on:
   push:
     branches:
       - main
+
+defaults:
+  run:
+    working-directory: client
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
@@ -15,14 +25,16 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '19'
-      - run: npm ci
+      - run: npm ci --force
       - run: npm run build
         env:
-          CI: false
+          REACT_APP_GOOGLE_MAPS_KEY: "${REACT_APP_GOOGLE_MAPS_KEY}"
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
-          cname: status.ufsolargators.org
+          path: './client/build'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
