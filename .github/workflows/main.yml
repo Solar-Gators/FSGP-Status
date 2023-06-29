@@ -24,7 +24,7 @@ jobs:
       - run: npm ci --force
       - run: npm run build
         env:
-          REACT_APP_GOOGLE_MAPS_KEY: "${REACT_APP_GOOGLE_MAPS_KEY}"
+          REACT_APP_GOOGLE_MAPS_KEY: "${{ vars.REACT_APP_GOOGLE_MAPS_KEY }}"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
